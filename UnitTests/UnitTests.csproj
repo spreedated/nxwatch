@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>tests.snk</AssemblyOriginatorKeyFile>
+    <NoWarn>1701;1702;IDE0063;S1186</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="ExampleHtmls\nxbrewExample.htm" />
+    <None Remove="ExampleHtmls\nxbrewExampleCorrupt.htm" />
+    <None Remove="ExampleHtmls\nxbrewExampleWrong.htm" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="ExampleHtmls\nxbrewExampleWrong.htm" />
+    <EmbeddedResource Include="ExampleHtmls\nxbrewExampleCorrupt.htm" />
+    <EmbeddedResource Include="ExampleHtmls\nxbrewExample.htm" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="NUnit" Version="4.0.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+    <PackageReference Include="NUnit.Analyzers" Version="3.10.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="6.0.0" />
+    <PackageReference Include="RichardSzalay.MockHttp" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Scraper\Scraper.csproj" />
+  </ItemGroup>
+
+</Project>
