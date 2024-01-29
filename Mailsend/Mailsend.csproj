@@ -11,4 +11,23 @@
     <Authors>Markus Karl Wackermann</Authors>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Templates\ETemplate1.htm" />
+    <None Remove="Templates\ETemplate1_Content.htm" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Templates\ETemplate1.htm" />
+    <EmbeddedResource Include="Templates\ETemplate1_Content.htm" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MailKit" Version="4.3.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Scraper\Scraper.csproj" />
+  </ItemGroup>
+
 </Project>

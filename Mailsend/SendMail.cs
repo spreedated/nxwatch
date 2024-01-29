@@ -1,26 +1,31 @@
 ﻿using MailKit.Net.Smtp;
+using Mailsend.Models;
 using MimeKit;
 using Newtonsoft.Json;
-using NxBrewWindowsServiceReporter.Models;
 using Scraper.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NxBrewWindowsServiceReporter.Logic
+namespace Mailsend
 {
     public class SendMail
     {
-        private readonly string emailJSONFile = Path.Combine(Environment.CurrentDirectory, "email.json");
-        private MailCredentials mailCredentials = null;
-        private readonly Queue<SwitchGame> switchGames = null;
+        internal MailCredentials mailCredentials = null;
+        internal readonly Queue<SwitchGame> switchGames = null;
+        internal string receiverEmailAddress = null;
+        internal ISmtpClient smtpClient = null;
+        public string EmailJSONFile { get; init; } = null;
 
         #region Constructor
-        public SendMail()
+        public SendMail(string filepath, string receiverEmailAddress)
         {
+            this.EmailJSONFile = filepath;
+            this.receiverEmailAddress = receiverEmailAddress;
             this.LoadMailCredentials();
             this.switchGames = new();
         }
@@ -45,8 +50,8 @@ namespace NxBrewWindowsServiceReporter.Logic
             {
                 return;
             }
-
-            using (SmtpClient smtpClient = new())
+            
+            using (this.smtpClient ??= new SmtpClient())
             {
                 smtpClient.Connect(this.mailCredentials.Host, this.mailCredentials.Port, this.mailCredentials.SSL);
                 smtpClient.Authenticate(this.mailCredentials.Username, this.mailCredentials.Password);
@@ -54,7 +59,7 @@ namespace NxBrewWindowsServiceReporter.Logic
                 using (MimeMessage m = new())
                 {
                     m.From.Add(new MailboxAddress(this.mailCredentials.Address, this.mailCredentials.Address));
-                    m.To.Add(new MailboxAddress("markus.wackermann@gmail.com", "markus.wackermann@gmail.com"));
+                    m.To.Add(new MailboxAddress(this.receiverEmailAddress, this.receiverEmailAddress));
                     m.Subject = $"[{Assembly.GetExecutingAssembly().GetName().Name}] New game{(this.switchGames.Count == 1 ? "" : "s")}";
                     m.Body = new TextPart(MimeKit.Text.TextFormat.Html)
                     {
@@ -84,27 +89,9 @@ namespace NxBrewWindowsServiceReporter.Logic
             return v;
         }
 
-        public bool DoesEmailJSONExist()
-        {
-            return File.Exists(this.emailJSONFile);
-        }
-
-        public void CreateEmailJSON()
-        {
-            File.Create(this.emailJSONFile).Close();
-
-            using (FileStream fs = File.Open(this.emailJSONFile, FileMode.Truncate, FileAccess.ReadWrite, FileShare.ReadWrite))
-            {
-                using (StreamWriter w = new(fs))
-                {
-                    w.Write(JsonConvert.SerializeObject(new MailCredentials(), Formatting.Indented));
-                }
-            }
-        }
-
         private void LoadMailCredentials()
         {
-            using (FileStream fs = File.Open(this.emailJSONFile, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (FileStream fs = File.Open(this.EmailJSONFile, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
                 using (StreamReader r = new(fs))
                 {
@@ -115,12 +102,25 @@ namespace NxBrewWindowsServiceReporter.Logic
 
         public static string GetEmbeddedHtml(string resourceName)
         {
+            if (string.IsNullOrEmpty(resourceName))
+            {
+                return null;
+            }
+
             if (!resourceName.EndsWith(".htm"))
             {
                 resourceName += ".htm";
             }
 
-            using (Stream fileStream = typeof(SendMail).Assembly.GetManifestResourceStream($"NxBrewWindowsServiceReporter.EmailTemplates.{resourceName}"))
+            Assembly a = typeof(SendMail).Assembly;
+            string resPath = a.GetManifestResourceNames().FirstOrDefault(x => x.Contains(resourceName, StringComparison.InvariantCultureIgnoreCase));
+
+            if (string.IsNullOrEmpty(resPath))
+            {
+                return null;
+            }
+
+            using (Stream fileStream = a.GetManifestResourceStream(resPath))
             {
                 if (fileStream == null)
                 {

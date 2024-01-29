@@ -15,16 +15,19 @@
     <None Remove="ExampleHtmls\nxbrewExample.htm" />
     <None Remove="ExampleHtmls\nxbrewExampleCorrupt.htm" />
     <None Remove="ExampleHtmls\nxbrewExampleWrong.htm" />
+    <None Remove="Testfiles\exampleemail2.json" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="ExampleHtmls\nxbrewExampleWrong.htm" />
     <EmbeddedResource Include="ExampleHtmls\nxbrewExampleCorrupt.htm" />
     <EmbeddedResource Include="ExampleHtmls\nxbrewExample.htm" />
+    <EmbeddedResource Include="Testfiles\exampleemail2.json" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="Moq" Version="4.20.70" />
     <PackageReference Include="NUnit" Version="4.0.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
     <PackageReference Include="NUnit.Analyzers" Version="3.10.0">

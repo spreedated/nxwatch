@@ -1,6 +1,9 @@
 ﻿using NxBrewWindowsServiceReporter.Logic;
 using NxBrewWindowsServiceReporter.Models;
 using System.Threading.Tasks;
+using Mailsend;
+using System.IO;
+using System;
 
 namespace NxBrewWindowsServiceReporter.Steps
 {
@@ -15,7 +18,7 @@ namespace NxBrewWindowsServiceReporter.Steps
 
         public override async Task Processor()
         {
-            SendMail sm = new();
+            SendMail sm = new(Path.Combine(Environment.CurrentDirectory, "email.json"), "markus.wackermann@gmail.com");
             sm.AddRange(RuntimeStorage.SendViaEmail);
             await sm.Send();
 

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace NxBrewWindowsServiceReporter.Models
+namespace Mailsend.Models
 {
     public record MailCredentials
     {

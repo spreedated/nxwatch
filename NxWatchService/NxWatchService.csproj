@@ -11,18 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="EmailTemplates\ETemplate1.htm" />
-    <None Remove="EmailTemplates\ETemplate1_Content.htm" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="EmailTemplates\ETemplate1.htm" />
-    <EmbeddedResource Include="EmailTemplates\ETemplate1_Content.htm" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="ByteSize" Version="2.1.2" />
-    <PackageReference Include="MailKit" Version="4.3.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Serilog" Version="3.1.1" />
     <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
@@ -32,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Mailsend\Mailsend.csproj" />
     <ProjectReference Include="..\Scraper\Scraper.csproj" />
   </ItemGroup>
 

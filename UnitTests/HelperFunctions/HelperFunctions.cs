@@ -24,5 +24,21 @@ namespace UnitTests.HelperFunctions
                 }
             }
         }
+
+        public static string GetEmbeddedText(string resourceName)
+        {
+            using (Stream fileStream = typeof(HelperFunctions).Assembly.GetManifestResourceStream($"UnitTests.Testfiles.{resourceName}"))
+            {
+                if (fileStream == null)
+                {
+                    return null;
+                }
+
+                using (StreamReader sr = new(fileStream))
+                {
+                    return sr.ReadToEnd();
+                }
+            }
+        }
     }
 }

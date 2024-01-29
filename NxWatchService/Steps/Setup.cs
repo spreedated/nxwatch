@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Mailsend.Models;
+using Newtonsoft.Json;
 using NxBrewWindowsServiceReporter.Models;
 using System;
 using System.IO;
