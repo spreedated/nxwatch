@@ -56,21 +56,28 @@ namespace Mailsend
                 smtpClient.Connect(this.mailCredentials.Host, this.mailCredentials.Port, this.mailCredentials.SSL);
                 smtpClient.Authenticate(this.mailCredentials.Username, this.mailCredentials.Password);
 
-                using (MimeMessage m = new())
-                {
-                    m.From.Add(new MailboxAddress(this.mailCredentials.Address, this.mailCredentials.Address));
-                    m.To.Add(new MailboxAddress(this.receiverEmailAddress, this.receiverEmailAddress));
-                    m.Subject = $"[{Assembly.GetExecutingAssembly().GetName().Name}] New game{(this.switchGames.Count == 1 ? "" : "s")}";
-                    m.Body = new TextPart(MimeKit.Text.TextFormat.Html)
-                    {
-                        Text = this.RenderMailbodyFromTemplate()
-                    };
+                MimeMessage msg = this.BuildMimeMessage();
 
-                    await smtpClient.SendAsync(m);
-                }
+                await smtpClient.SendAsync(msg);
 
+                msg.Dispose();
                 smtpClient.Disconnect(true);
             }
+        }
+
+        internal MimeMessage BuildMimeMessage()
+        {
+            MimeMessage m = new();
+
+            m.From.Add(new MailboxAddress(this.mailCredentials.Address, this.mailCredentials.Address));
+            m.To.Add(new MailboxAddress(this.receiverEmailAddress, this.receiverEmailAddress));
+            m.Subject = $"[{Assembly.GetExecutingAssembly().GetName().Name}] New game{(this.switchGames.Count == 1 ? "" : "s")}";
+            m.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+            {
+                Text = this.RenderMailbodyFromTemplate()
+            };
+
+            return m;
         }
 
         internal string RenderMailbodyFromTemplate()

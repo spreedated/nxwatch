@@ -135,39 +135,23 @@ namespace MailsendLayer
         }
 
         [Test]
-        public void SendMailMethodTests()
+        public void BuildMimeMethodTests()
         {
-            Moq.Mock<ISmtpClient> smtpClientMock = new();
+            SendMail s = new(this.testfilepath2, "some@one.com");
+            MimeMessage mm = s.BuildMimeMessage();
 
-            smtpClientMock
-                .Setup(x => x.SendAsync(It.Is<MimeMessage>(x => x.From.ToString() == "foobar_pp"), default, default))
-                //.Setup(x => x.SendAsync(It.Is<MimeMessage>(x => x.To.Any(y => y.ToString() == "www")), default, default))
-                .Returns<MimeMessage, CancellationToken, ITransferProgress>((x,y,z) => { return Task<string>.Factory.StartNew(() => default); });
-
-            SendMail s = new(this.testfilepath2, "none@none.com")
+            Assert.That(mm, Is.Not.Null);
+            Assert.Multiple(() =>
             {
-                smtpClient = smtpClientMock.Object
-            };
-
-            s.switchGames.Enqueue(new()
-            {
-                Categories = ["Action", "Adventure"],
-                Date = DateTime.Now,
-                Link = "https://www.nintendo.com/games/detail/animal-crossing-new-horizons-switch/",
-                Name = "Animal Crossing: New Horizons",
-                NxDate = DateTime.Now
+                Assert.That(mm.From.ToString(), Is.EqualTo("\"foobar_p\" <foobar_p>"));
+                Assert.That(mm.To.ToString(), Is.EqualTo("\"some@one.com\" <some@one.com>"));
+                Assert.That(mm.Subject.ToLower().Contains("game"), Is.True);
+                Assert.That(mm.HtmlBody, Is.Not.Null);
             });
 
-            s.switchGames.Enqueue(new()
-            {
-                Categories = ["Adventure"],
-                Date = DateTime.Now.AddDays(-2),
-                Link = "https://store.nintendo.de/de/mario-vs-donkey-kong-70010000072192",
-                Name = "Mario vs. Donkey Kong",
-                NxDate = DateTime.Now.AddDays(-2)
-            });
-            
-            Assert.DoesNotThrowAsync(s.Send);
+
+
+            Assert.DoesNotThrow(mm.Dispose);
         }
     }
 }
