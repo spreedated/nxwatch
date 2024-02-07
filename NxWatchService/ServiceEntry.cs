@@ -6,6 +6,7 @@ using Serilog.Events;
 using System;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.ServiceProcess;
 using System.Text;
 
@@ -19,6 +20,17 @@ namespace NxBrewWindowsServiceReporter
 #else
         internal readonly static LogEventLevel level = LogEventLevel.Information;
 #endif
+
+        public ServiceEntry()
+        {
+            base.ServiceName = Assembly.GetExecutingAssembly().GetName().Name;
+            base.EventLog.Log = "Application";
+
+            base.CanStop = true;
+            base.CanShutdown = true;
+            base.CanPauseAndContinue = true;
+        }
+
         public static void CreateLoggingObject()
         {
             Log.Logger = new LoggerConfiguration()

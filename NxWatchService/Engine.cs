@@ -143,9 +143,12 @@ namespace NxBrewWindowsServiceReporter
 
         private static void EndLoop(bool success = false)
         {
-            foreach (Step s in currentSteplist)
+            if (currentSteplist != null)
             {
-                s.Dispose();
+                foreach (Step s in currentSteplist)
+                {
+                    s.Dispose();
+                }
             }
 
             if (success)
