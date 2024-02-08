@@ -18,7 +18,7 @@ namespace NxBrewWindowsServiceReporter.Steps
 
         public override async Task Processor()
         {
-            SendMail sm = new(Path.Combine(Environment.CurrentDirectory, "email.json"), "markus.wackermann@gmail.com");
+            SendMail sm = new(Path.Combine(RuntimeStorage.ConfigurationHandler.RuntimeConfiguration.ConfigDir, "email.json"), "markus.wackermann@gmail.com");
             sm.AddRange(RuntimeStorage.SendViaEmail);
             await sm.Send();
 

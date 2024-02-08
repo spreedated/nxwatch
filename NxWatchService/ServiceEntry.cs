@@ -49,7 +49,7 @@ namespace NxBrewWindowsServiceReporter
             base.OnStart(args);
 
             CreateLoggingObject();
-            RuntimeStorage.ConfigurationHandler = new(new(Path.Combine(Environment.CurrentDirectory, "config.json")) { CreateOnNothing = true, OverrideOnInvalid = true });
+            RuntimeStorage.ConfigurationHandler = new(new(Path.Combine($"C:\\ServiceLogs\\{Assembly.GetExecutingAssembly().GetName().Name}\\config", "config.json")) { CreateOnNothing = true, OverrideOnInvalid = true });
             RuntimeStorage.ConfigurationHandler.Load();
 
             try

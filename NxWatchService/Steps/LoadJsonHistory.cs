@@ -20,7 +20,7 @@ namespace NxBrewWindowsServiceReporter.Steps
 
         public override async Task Processor()
         {
-            string filepath = Path.Combine(Environment.CurrentDirectory, "history.json");
+            string filepath = Path.Combine(RuntimeStorage.ConfigurationHandler.RuntimeConfiguration.ConfigDir, "history.json");
 
             if (!File.Exists(filepath))
             {

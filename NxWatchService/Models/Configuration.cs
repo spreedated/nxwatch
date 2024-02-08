@@ -8,7 +8,7 @@ namespace NxBrewWindowsServiceReporter.Models
     internal class Configuration
     {
         [JsonIgnore]
-        public string RootDir { get; } = @"C:\neXnServices\" + Assembly.GetExecutingAssembly().GetName().Name;
+        public string RootDir { get; } = @"C:\ServiceLogs\" + Assembly.GetExecutingAssembly().GetName().Name;
         public string WorkingDir
         {
             get

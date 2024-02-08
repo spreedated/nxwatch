@@ -1,7 +1,7 @@
 ﻿using Mailsend.Models;
 using Newtonsoft.Json;
+using NxBrewWindowsServiceReporter.Logic;
 using NxBrewWindowsServiceReporter.Models;
-using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -19,7 +19,7 @@ namespace NxBrewWindowsServiceReporter.Steps
 
         public override async Task Processor()
         {
-            string emailFile = Path.Combine(Environment.CurrentDirectory, "email.json");
+            string emailFile = Path.Combine(RuntimeStorage.ConfigurationHandler.RuntimeConfiguration.ConfigDir, "email.json");
 
             if (!File.Exists(emailFile))
             {
