@@ -20,7 +20,14 @@ namespace NxBrewWindowsServiceReporter
             mainLoopTimer.Enabled = true;
             mainLoopTimer.Start();
 
+            RuntimeStorage.ConfigurationHandler.AutoloadTriggered += OnConfigReloaded;
+
             MainLoopTimerElapsed(null, null); // run once at startup
+        }
+
+        private static void OnConfigReloaded(object sender, EventArgs e)
+        {
+            mainLoopTimer.Interval = RuntimeStorage.ConfigurationHandler.RuntimeConfiguration.TimeInterval.TotalMilliseconds;
         }
 
         #region Main Loop
