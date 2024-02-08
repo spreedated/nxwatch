@@ -50,6 +50,7 @@ namespace NxBrewWindowsServiceReporter
 
             CreateLoggingObject();
             RuntimeStorage.ConfigurationHandler = new(new(Path.Combine(Environment.CurrentDirectory, "config.json")) { CreateOnNothing = true, OverrideOnInvalid = true });
+            RuntimeStorage.ConfigurationHandler.Load();
 
             try
             {
