@@ -1,11 +1,12 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Scraper.Models
 {
-    public record SwitchGame
+    public record SwitchGame : IValidatableObject
     {
         [JsonProperty("categories")]
         public string[] Categories { get; set; }
@@ -21,6 +22,32 @@ namespace Scraper.Models
 
         [JsonProperty("nxdate")]
         public DateTime NxDate { get; set; }
+
+        [JsonIgnore()]
+        public bool IsInDB { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (string.IsNullOrEmpty(this.Name))
+            {
+                yield return new ValidationResult("Name is required.", [nameof(this.Name)]);
+            }
+
+            if (string.IsNullOrEmpty(this.Link))
+            {
+                yield return new ValidationResult("Link is required.", [nameof(this.Link)]);
+            }
+
+            if (this.Date == default)
+            {
+                yield return new ValidationResult("Date is required.", [nameof(this.Date)]);
+            }
+
+            if (this.NxDate == default)
+            {
+                yield return new ValidationResult("NxDate is required.", [nameof(this.NxDate)]);
+            }
+        }
     }
 
     public class SwitchGameComparer : EqualityComparer<SwitchGame>
