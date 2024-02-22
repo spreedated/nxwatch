@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace NxBrewWindowsServiceReporter.Models
+namespace ContainerService.Models
 {
     public abstract class Step : IDisposable
     {

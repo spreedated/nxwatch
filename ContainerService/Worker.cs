@@ -1,42 +1,35 @@
-﻿//#define RUNONLYONCEADAY
-
-using NxBrewWindowsServiceReporter.Logic;
-using NxBrewWindowsServiceReporter.Models;
+using ContainerService.Logic;
+using ContainerService.Models;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Timers;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace NxBrewWindowsServiceReporter
+namespace ContainerService
 {
-    internal static class Engine
+    public class Worker : BackgroundService
     {
-        public static void Initialize()
+        internal bool loopRunning = false;
+        internal List<Step> currentSteplist = null;
+        internal bool amIAsleep = false;
+
+        public Worker()
         {
-            mainLoopTimer.Interval = RuntimeStorage.ConfigurationHandler.RuntimeConfiguration.TimeInterval.TotalMilliseconds;
-            mainLoopTimer.Elapsed += MainLoopTimerElapsed;
-            mainLoopTimer.Enabled = true;
-            mainLoopTimer.Start();
-
-            RuntimeStorage.ConfigurationHandler.AutoloadTriggered += OnConfigReloaded;
-
-            MainLoopTimerElapsed(null, null); // run once at startup
         }
 
-        private static void OnConfigReloaded(object sender, EventArgs e)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            mainLoopTimer.Interval = RuntimeStorage.ConfigurationHandler.RuntimeConfiguration.TimeInterval.TotalMilliseconds;
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                await this.Run();
+                await Task.Delay((int)RuntimeStorage.ConfigurationHandler.RuntimeConfiguration.TimeInterval.TotalMilliseconds, stoppingToken);
+            }
         }
 
-        #region Main Loop
-        internal static readonly System.Timers.Timer mainLoopTimer = new();
-        internal static bool loopRunning = false;
-        internal static List<Step> currentSteplist = null;
-        internal static bool amIAsleep = false;
-        internal static long runcount = 0;
-        public static async void MainLoopTimerElapsed(object sender, ElapsedEventArgs e)
+        private async Task Run()
         {
             if (loopRunning)
             {
@@ -52,13 +45,17 @@ namespace NxBrewWindowsServiceReporter
             }
 #endif
 
-            if (IsInNightMode())
+            if (this.IsInNightMode())
             {
-                EndLoop();
+                this.EndLoop();
                 return;
             }
 
-            Queue<Step> steps = GetAllSteps();
+#if SKIPALLSTEPS
+            return;
+#endif
+
+            Queue<Step> steps = this.GetAllSteps();
 
             Log.Information($"Executing {steps.Count} active steps");
             int initialStepCount = steps.Count;
@@ -72,7 +69,7 @@ namespace NxBrewWindowsServiceReporter
                     Log.Error($"{s.Id} ({s.Name} cannot execute, CanExecute is not returned false");
                     if (!s.ContinueOnError)
                     {
-                        EndLoop();
+                        this.EndLoop();
                         return;
                     }
                     continue;
@@ -90,7 +87,7 @@ namespace NxBrewWindowsServiceReporter
                 if (!s.ContinueOnError && s.Ex != null)
                 {
                     Log.Error(s.Ex, $"Error in step {s.Id} ({s.Name}) aborting...");
-                    EndLoop();
+                    this.EndLoop();
                     return;
                 }
 
@@ -100,11 +97,10 @@ namespace NxBrewWindowsServiceReporter
                 }
             }
 
-            EndLoop(true);
+            this.EndLoop(true);
         }
-        #endregion
 
-        private static bool IsInNightMode()
+        private bool IsInNightMode()
         {
             TimeSpan nowT = DateTime.Now.TimeOfDay;
 
@@ -133,12 +129,12 @@ namespace NxBrewWindowsServiceReporter
         /// filtered out inactive steps and steps that are only allowed to run once a day and already ran today
         /// </summary>
         /// <returns></returns>
-        private static Queue<Step> GetAllSteps()
+        private Queue<Step> GetAllSteps()
         {
             currentSteplist ??= [];
             currentSteplist.Clear();
 
-            IEnumerable<Type> allSteps = typeof(Engine).Assembly.GetTypes().Where(x => x.IsClass && !x.IsAbstract && x.IsSubclassOf(typeof(Step)));
+            IEnumerable<Type> allSteps = typeof(Worker).Assembly.GetTypes().Where(x => x.IsClass && !x.IsAbstract && x.IsSubclassOf(typeof(Step)));
 
             foreach (Type s in allSteps)
             {
@@ -148,7 +144,7 @@ namespace NxBrewWindowsServiceReporter
             return new(currentSteplist.Where(x => x.IsActive && !(x.RunOnlyOnceADay && x.RunDay != DateTime.Now.Day)).OrderBy(x => x.Id));
         }
 
-        private static void EndLoop(bool success = false)
+        private void EndLoop(bool success = false)
         {
             if (currentSteplist != null)
             {
@@ -164,7 +160,6 @@ namespace NxBrewWindowsServiceReporter
             }
 
             loopRunning = false;
-            runcount++;
 
             RuntimeStorage.ConfigurationHandler.Save();
         }
