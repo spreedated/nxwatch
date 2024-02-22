@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 using Scraper.Models;
 using System;
-using System.Linq;
 
 namespace ScraperLayer
 {
