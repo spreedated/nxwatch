@@ -1,0 +1,23 @@
+﻿CREATE TABLE "categories" (
+	"id"	INTEGER NOT NULL,
+	"name"	TEXT NOT NULL UNIQUE,
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+
+CREATE TABLE "games" (
+	"id"	INTEGER NOT NULL,
+	"name"	TEXT NOT NULL,
+	"date"	TEXT NOT NULL,
+	"link"	TEXT NOT NULL,
+	"nxdate"	TEXT NOT NULL,
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+
+CREATE TABLE "gameCategoriesMapping" (
+	"id"	INTEGER NOT NULL,
+	"game"	INTEGER NOT NULL,
+	"category"	INTEGER NOT NULL,
+	FOREIGN KEY("game") REFERENCES games(id),
+	FOREIGN KEY("category") REFERENCES categories(id),
+	PRIMARY KEY("id" AUTOINCREMENT)
+);

@@ -1,0 +1,1 @@
+﻿INSERT INTO games (name,date,link,nxdate) VALUES (@name,@date,@link,@nxdate);
