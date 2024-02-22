@@ -1,6 +1,6 @@
-﻿using DiscordBot.EventArgs;
-using Discord;
+﻿using Discord;
 using Discord.WebSocket;
+using DiscordBot.EventArgs;
 using System;
 using System.Collections.Generic;
 using System.IO;

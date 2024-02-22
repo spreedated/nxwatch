@@ -4,8 +4,8 @@ using Scraper.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using System.Net.Http;
+using System.Threading.Tasks;
 using static UnitTests.HelperFunctions.HelperFunctions;
 
 namespace ScraperLayer
@@ -184,7 +184,7 @@ namespace ScraperLayer
         }
 
         [Test]
-        [TestCase(false, 0, 2 ,2)]
+        [TestCase(false, 0, 2, 2)]
         [TestCase(true, 0, 2, 2)]
         [TestCase(true, 0, 0, 0)]
         [TestCase(true, 36, 2, 3)]
@@ -230,7 +230,7 @@ namespace ScraperLayer
 
             using (Scraper.Scraper s = new() { httpClient = timedoutMock })
             {
-                s.TaskCanceled += (s,e) => isCanceled = true;
+                s.TaskCanceled += (s, e) => isCanceled = true;
                 Assert.DoesNotThrowAsync(async () => results = (await s.GetGamesFromPage()).ToList());
             }
 

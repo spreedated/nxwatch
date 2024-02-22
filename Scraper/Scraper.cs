@@ -1,11 +1,11 @@
 ﻿using HtmlAgilityPack;
 using Scraper.Models;
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Globalization;
 
 namespace Scraper
 {
@@ -168,7 +168,7 @@ namespace Scraper
 
             List<SwitchGame> games = [];
 
-            for (int i = from; i < to+1; i++)
+            for (int i = from; i < to + 1; i++)
             {
                 games.AddRange(await this.GetGamesFromPage(i));
             }

@@ -54,7 +54,7 @@ namespace Scraper.Models
     {
         public override bool Equals(SwitchGame x, SwitchGame y)
         {
-            return x.Name == y.Name 
+            return x.Name == y.Name
                 && x.NxDate == y.NxDate
                 && x.Link == y.Link;
         }

@@ -1,8 +1,0 @@
-{
-  "host": "smtp.gmail.com",
-  "username": "foobar",
-  "password": "pass",
-  "port": 587,
-  "ssl": true,
-  "address": "foobar_p"
-}

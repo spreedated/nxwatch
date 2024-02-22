@@ -1,13 +1,9 @@
-﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
+﻿using Database;
 using Microsoft.Data.Sqlite;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Database;
 using Moq;
+using NUnit.Framework;
 using Scraper.Models;
+using System;
 
 namespace DatabaseLayer
 {
@@ -70,7 +66,7 @@ namespace DatabaseLayer
                 Date = DateTime.Now,
                 Link = "https://example.com",
                 NxDate = DateTime.Now,
-                Categories = [ "Test", "foo", "bar" ]
+                Categories = ["Test", "foo", "bar"]
             };
 
             SwitchGame game1 = new()

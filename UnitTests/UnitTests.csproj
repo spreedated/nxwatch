@@ -12,17 +12,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Testfiles\**" />
+    <EmbeddedResource Remove="Testfiles\**" />
+    <None Remove="Testfiles\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="ExampleHtmls\nxbrewExample.htm" />
     <None Remove="ExampleHtmls\nxbrewExampleCorrupt.htm" />
     <None Remove="ExampleHtmls\nxbrewExampleWrong.htm" />
-    <None Remove="Testfiles\exampleemail2.json" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="ExampleHtmls\nxbrewExampleWrong.htm" />
     <EmbeddedResource Include="ExampleHtmls\nxbrewExampleCorrupt.htm" />
     <EmbeddedResource Include="ExampleHtmls\nxbrewExample.htm" />
-    <EmbeddedResource Include="Testfiles\exampleemail2.json" />
   </ItemGroup>
 
   <ItemGroup>
