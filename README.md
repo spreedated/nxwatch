@@ -1,7 +1,7 @@
 NxWatch Service - Release Monitor
 =================================
 
-NXWatch is a Windows service application designed to operate discreetly in the background,<br/>
+NXWatch is a Docker Container application, running on linux, designed to operate in the background,<br/>
 keeping a vigilant eye on the popular website "nxbrew" for the latest game releases.<br/>
 Whether you're an avid gamer or a collector,<br/>
 NXWatch ensures that you never miss out on exciting new releases for your Nintendo Switch console.
