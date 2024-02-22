@@ -22,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mailsend\Mailsend.csproj" />
     <ProjectReference Include="..\Scraper\Scraper.csproj" />
   </ItemGroup>
 
