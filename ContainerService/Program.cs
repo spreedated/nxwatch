@@ -2,6 +2,7 @@ using ByteSizeLib;
 using ContainerService.Logic;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Context;
 using Serilog.Events;
@@ -22,6 +23,8 @@ namespace ContainerService
 
         public static void Main(string[] args)
         {
+            CreateLoggingObject();
+
             RuntimeStorage.ConfigurationHandler = new(new(Path.Combine(Environment.CurrentDirectory, "config", "config.json")) { CreateOnNothing = true, OverrideOnInvalid = true });
             RuntimeStorage.ConfigurationHandler.Load();
 
@@ -31,7 +34,7 @@ namespace ContainerService
             }
 
             HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
-            //builder.Logging.ClearProviders();
+            builder.Logging.ClearProviders();
             builder.Logging.AddSerilog();
             builder.Services.AddHostedService<Worker>();
 
