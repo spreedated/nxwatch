@@ -12,7 +12,7 @@ namespace ContainerService.Steps
             base.Id = 4;
             base.Name = "Save processed games to Database";
             base.ContinueOnError = false;
-            base.IsActive = false;
+            base.IsActive = true;
         }
 
         public override async Task Processor()

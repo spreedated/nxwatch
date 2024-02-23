@@ -13,7 +13,7 @@ namespace ContainerService.Steps
             base.Id = 3;
             base.Name = "Send Games to Channel";
             base.ContinueOnError = false;
-            base.IsActive = false;
+            base.IsActive = true;
         }
 
         public override async Task Processor()
