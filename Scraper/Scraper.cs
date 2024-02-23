@@ -3,6 +3,7 @@ using Scraper.Models;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -35,7 +36,7 @@ namespace Scraper
                 Timeout = TimeSpan.FromSeconds(10),
                 DefaultRequestHeaders =
                 {
-                    { "User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X)" }
+                    { "User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246" }
                 }
             };
         }
@@ -96,6 +97,7 @@ namespace Scraper
             {
                 using (HttpResponseMessage m = await this.httpClient.GetAsync(BuildUrl(page)))
                 {
+                    //# ### # 
                     if (!m.IsSuccessStatusCode)
                     {
                         return null;
