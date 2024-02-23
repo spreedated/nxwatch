@@ -12,7 +12,7 @@ namespace ContainerService.Steps
     {
         public QueryNxBrew() : base()
         {
-            base.Id = 1;
+            base.Id = 2;
             base.Name = "Query NxBrew Website";
             base.ContinueOnError = false;
             base.IsActive = true;

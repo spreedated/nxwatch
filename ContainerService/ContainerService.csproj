@@ -7,7 +7,10 @@
     <UserSecretsId>dotnet-ContainerService-56a76029-74ab-431d-a6e1-b9029a09b5ce</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <AssemblyName>nxreporter-bot</AssemblyName>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>nxbot.snk</AssemblyOriginatorKeyFile>
+    <NoWarn>1701;1702;IDE0063</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
