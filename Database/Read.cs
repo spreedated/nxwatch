@@ -27,7 +27,6 @@ namespace Database
         public static async Task<IEnumerable<SwitchGame>> ReadAllGames(this IDatabaseConnection dbConnection)
         {
             List<SwitchGame> games = [];
-            long gamesInDB = 0;
 
             using (SqliteCommand cmd = dbConnection.Connection.CreateCommand())
             {
@@ -42,7 +41,7 @@ namespace Database
                 }
             }
 
-            gamesInDB = await dbConnection.GetGamesCount();
+            long gamesInDB = await dbConnection.GetGamesCount();
 
             if (gamesInDB != games.Count)
             {
@@ -55,7 +54,6 @@ namespace Database
         public static async Task<IEnumerable<int>> ReadAllGameIds(this IDatabaseConnection dbConnection)
         {
             List<int> gameIds = [];
-            long gamesInDB = 0;
 
             using (SqliteCommand cmd = dbConnection.Connection.CreateCommand())
             {
@@ -70,7 +68,7 @@ namespace Database
                 }
             }
 
-            gamesInDB = await dbConnection.GetGamesCount();
+            long gamesInDB = await dbConnection.GetGamesCount();
 
             if (gamesInDB != gameIds.Count)
             {

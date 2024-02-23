@@ -28,7 +28,7 @@ namespace ContainerService.Steps
 
             if (!File.Exists(RuntimeStorage.ConfigurationHandler.RuntimeConfiguration.DatabasePath))
             {
-                using (DatabaseConnection conn = new(RuntimeStorage.ConfigurationHandler.RuntimeConfiguration.DatabasePath))
+                using (IDatabaseConnection conn = new DatabaseConnection(RuntimeStorage.ConfigurationHandler.RuntimeConfiguration.DatabasePath))
                 {
                     await conn.CreateBlankDatabase();
                 }
@@ -37,7 +37,6 @@ namespace ContainerService.Steps
             if (!IsFileWritable(RuntimeStorage.ConfigurationHandler.RuntimeConfiguration.DatabasePath))
             {
                 base.SetError(new AccessViolationException("games.db is not accessable!"));
-                return;
             }
         }
 

@@ -15,7 +15,7 @@ namespace ContainerService.Steps
             base.Id = 2;
             base.Name = "Query NxBrew Website";
             base.ContinueOnError = false;
-            base.IsActive = true;
+            base.IsActive = false;
         }
 
         public override async Task Processor()

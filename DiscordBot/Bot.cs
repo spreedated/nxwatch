@@ -15,16 +15,16 @@ namespace DiscordBot
     public class Bot : IDisposable
     {
         private CancellationTokenSource cts;
-        private DiscordSocketClient client;
         private IMessageChannel primaryChannel;
 
+        public DiscordSocketClient Client { get; private set; }
         public string Token { get; init; }
         public bool IsReady { get; private set; }
         public bool IsConnected
         {
             get
             {
-                return this.client?.ConnectionState == ConnectionState.Connected;
+                return this.Client?.ConnectionState == ConnectionState.Connected;
             }
         }
         public ulong PrimaryChannelId { get; init; }
@@ -65,14 +65,14 @@ namespace DiscordBot
 
         private Task OnReady()
         {
-            while (this.client.ConnectionState != ConnectionState.Connected)
+            while (this.Client.ConnectionState != ConnectionState.Connected)
             {
                 Task.Delay(100);
             }
 
             this.Connected?.Invoke(this, System.EventArgs.Empty);
 
-            this.primaryChannel = (IMessageChannel)this.client.GetChannel(this.PrimaryChannelId);
+            this.primaryChannel = (IMessageChannel)this.Client.GetChannel(this.PrimaryChannelId);
 
             if (this.primaryChannel == null)
             {
@@ -106,17 +106,17 @@ namespace DiscordBot
 
         public async Task Connect()
         {
-            if (this.client != null || this.IsConnected || this.IsReady)
+            if (this.Client != null || this.IsConnected || this.IsReady)
             {
                 return;
             }
 
             this.cts = new();
-            this.client = new(GetDefaultConfig());
-            this.client.Ready += this.OnReady;
+            this.Client = new(GetDefaultConfig());
+            this.Client.Ready += this.OnReady;
 
-            await this.client.LoginAsync(TokenType.Bot, this.Token);
-            await this.client.StartAsync();
+            await this.Client.LoginAsync(TokenType.Bot, this.Token);
+            await this.Client.StartAsync();
 
             int retries = this.ConnectionRetries;
 
@@ -142,19 +142,19 @@ namespace DiscordBot
 
             this.cts?.Dispose();
 
-            this.client.MessageReceived += this.MessageReceivedAsync;
+            this.Client.MessageReceived += this.MessageReceivedAsync;
 
             this.FullyInitialized?.Invoke(this, System.EventArgs.Empty);
         }
 
         public async Task Disconnect()
         {
-            if (this.client == null)
+            if (this.Client == null)
             {
                 return;
             }
 
-            await this.client.StopAsync();
+            await this.Client.StopAsync();
             this.IsReady = false;
         }
 
@@ -182,7 +182,7 @@ namespace DiscordBot
         protected virtual void Dispose(bool disposing)
         {
             this.IsReady = false;
-            this.client?.Dispose();
+            this.Client?.Dispose();
         }
 
         public void Dispose()

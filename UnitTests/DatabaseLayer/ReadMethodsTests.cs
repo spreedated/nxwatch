@@ -101,9 +101,9 @@ namespace DatabaseLayer
             Assert.Multiple(() =>
             {
                 Assert.That(gameIds.Count(), Is.EqualTo(2));
-                Assert.That(gameIds.Contains(1), Is.True);
-                Assert.That(gameIds.Contains(2), Is.True);
-                Assert.That(gameIds.Contains(0), Is.False);
+                Assert.That(gameIds, Does.Contain(1));
+                Assert.That(gameIds, Does.Contain(2));
+                Assert.That(gameIds, Does.Not.Contain(0));
             });
         }
 
