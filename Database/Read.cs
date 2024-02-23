@@ -29,23 +29,20 @@ namespace Database
             List<SwitchGame> games = [];
             long gamesInDB = 0;
 
-            using (IDatabaseConnection conn = dbConnection)
+            using (SqliteCommand cmd = dbConnection.Connection.CreateCommand())
             {
-                using (SqliteCommand cmd = conn.Connection.CreateCommand())
-                {
-                    cmd.CommandText = LoadEmbeddedSql("SelectAllGames");
+                cmd.CommandText = LoadEmbeddedSql("SelectAllGames");
 
-                    using (SqliteDataReader dr = await cmd.ExecuteReaderAsync())
+                using (SqliteDataReader dr = await cmd.ExecuteReaderAsync())
+                {
+                    while (dr.Read())
                     {
-                        while (dr.Read())
-                        {
-                            games.Add(DataReaderToGame(dr));
-                        }
+                        games.Add(DataReaderToGame(dr));
                     }
                 }
-
-                gamesInDB = await dbConnection.GetGamesCount();
             }
+
+            gamesInDB = await dbConnection.GetGamesCount();
 
             if (gamesInDB != games.Count)
             {
@@ -60,23 +57,20 @@ namespace Database
             List<int> gameIds = [];
             long gamesInDB = 0;
 
-            using (IDatabaseConnection conn = dbConnection)
+            using (SqliteCommand cmd = dbConnection.Connection.CreateCommand())
             {
-                using (SqliteCommand cmd = conn.Connection.CreateCommand())
-                {
-                    cmd.CommandText = LoadEmbeddedSql("SelectAllGameIds");
+                cmd.CommandText = LoadEmbeddedSql("SelectAllGameIds");
 
-                    using (SqliteDataReader dr = await cmd.ExecuteReaderAsync())
+                using (SqliteDataReader dr = await cmd.ExecuteReaderAsync())
+                {
+                    while (dr.Read())
                     {
-                        while (dr.Read())
-                        {
-                            gameIds.Add(dr.GetInt32(0));
-                        }
+                        gameIds.Add(dr.GetInt32(0));
                     }
                 }
-
-                gamesInDB = await dbConnection.GetGamesCount();
             }
+
+            gamesInDB = await dbConnection.GetGamesCount();
 
             if (gamesInDB != gameIds.Count)
             {
@@ -88,13 +82,27 @@ namespace Database
 
         public static async Task<long> GetGamesCount(this IDatabaseConnection dbConnection)
         {
-            using (IDatabaseConnection conn = dbConnection)
+            using (SqliteCommand cmd = dbConnection.Connection.CreateCommand())
             {
-                using (SqliteCommand cmd = conn.Connection.CreateCommand())
-                {
-                    cmd.CommandText = LoadEmbeddedSql("SelectGamesCount");
+                cmd.CommandText = LoadEmbeddedSql("SelectGamesCount");
 
-                    return (long)await cmd.ExecuteScalarAsync();
+                return (long)await cmd.ExecuteScalarAsync();
+            }
+        }
+
+        public static async Task<SwitchGame> GetLatest(this IDatabaseConnection dbConnection)
+        {
+            using (SqliteCommand cmd = dbConnection.Connection.CreateCommand())
+            {
+                cmd.CommandText = LoadEmbeddedSql("SelectLatest");
+
+                using (SqliteDataReader dr = await cmd.ExecuteReaderAsync())
+                {
+                    if (!dr.Read())
+                    {
+                        return null;
+                    }
+                    return DataReaderToGame(dr);
                 }
             }
         }

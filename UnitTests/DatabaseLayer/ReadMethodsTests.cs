@@ -22,7 +22,7 @@ namespace DatabaseLayer
 
             using (SqliteCommand cmd = this.sampleDatabase.CreateCommand())
             {
-                cmd.CommandText = Database.HelperFunctions.LoadEmbeddedSql("CreateBlankDatabase");
+                cmd.CommandText = HelperFunctions.LoadEmbeddedSql("CreateBlankDatabase");
                 cmd.ExecuteNonQuery();
             }
 
@@ -150,6 +150,44 @@ namespace DatabaseLayer
             });
             Assert.That(gamecount, Is.Not.Default);
             Assert.That(gamecount, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void GetLatestTests()
+        {
+            Mock<IDatabaseConnection> dbConnection = new();
+            dbConnection.Setup(x => x.Connection).Returns(this.sampleDatabase);
+            dbConnection.Setup(x => x.Open()).Returns(this.sampleDatabase);
+            dbConnection.Setup(x => x.Close()).Verifiable();
+
+            SwitchGame game = null;
+
+            Assert.DoesNotThrowAsync(async () =>
+            {
+                game = await dbConnection.Object.GetLatest();
+            });
+            Assert.That(game, Is.Not.Null);
+            Assert.That(game.Name, Is.EqualTo("Test Game2"));
+
+            SqliteConnection sampleDatabase2 = new("Data Source=:memory:");
+            sampleDatabase2.Open();
+
+            using (SqliteCommand cmd = sampleDatabase2.CreateCommand())
+            {
+                cmd.CommandText = HelperFunctions.LoadEmbeddedSql("CreateBlankDatabase");
+                cmd.ExecuteNonQuery();
+            }
+
+            Mock<IDatabaseConnection> dbConnection2 = new();
+            dbConnection2.Setup(x => x.Connection).Returns(sampleDatabase2);
+            dbConnection2.Setup(x => x.Open()).Returns(sampleDatabase2);
+            dbConnection2.Setup(x => x.Close()).Verifiable();
+
+            Assert.DoesNotThrowAsync(async () =>
+            {
+                game = await dbConnection2.Object.GetLatest();
+            });
+            Assert.That(game, Is.Null);
         }
 
         [TearDown]

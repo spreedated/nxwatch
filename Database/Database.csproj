@@ -18,6 +18,7 @@
     <None Remove="Sql\SelectAllGameIds.sql" />
     <None Remove="Sql\SelectAllGames.sql" />
     <None Remove="Sql\SelectGamesCount.sql" />
+    <None Remove="Sql\SelectLatest.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,6 +26,7 @@
     <EmbeddedResource Include="Sql\InsertGame.sql" />
     <EmbeddedResource Include="Sql\CreateBlankDatabase.sql" />
     <EmbeddedResource Include="Sql\SelectAllGameIds.sql" />
+    <EmbeddedResource Include="Sql\SelectLatest.sql" />
     <EmbeddedResource Include="Sql\SelectAllGames.sql" />
     <EmbeddedResource Include="Sql\SelectGamesCount.sql" />
   </ItemGroup>
