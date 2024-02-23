@@ -1,4 +1,6 @@
-﻿using ContainerService.Logic;
+﻿#pragma warning disable S2583
+
+using ContainerService.Logic;
 using ContainerService.Models;
 using Serilog;
 using System;

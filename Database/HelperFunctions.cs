@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿#pragma warning disable S6605
+
+using System.IO;
 using System.Linq;
 using System.Reflection;
 

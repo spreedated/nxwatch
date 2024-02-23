@@ -1,4 +1,6 @@
-﻿using Discord;
+﻿#pragma warning disable S6605
+
+using Discord;
 using Discord.WebSocket;
 using DiscordBot.EventArgs;
 using System;
@@ -85,7 +87,7 @@ namespace DiscordBot
 
         private async Task MessageReceivedAsync(SocketMessage message)
         {
-            if (message.Channel.Id != this.PrimaryChannelId || !this.Commands.Any(x => x.Triggers.Any(x => x.Contains(message.Content.Split()[0], StringComparison.InvariantCultureIgnoreCase))))
+            if (message.Channel.Id != this.PrimaryChannelId || !this.Commands.Exists(x => x.Triggers.Any(x => x.Contains(message.Content.Split()[0], StringComparison.InvariantCultureIgnoreCase))))
             {
                 return;
             }
