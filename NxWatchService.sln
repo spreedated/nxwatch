@@ -10,6 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{498EA0EF-EF61-42B3-8B85-FBC6052B3EA2}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		.gitignore = .gitignore
 		LICENSE.txt = LICENSE.txt
 		README.md = README.md
 	EndProjectSection
@@ -18,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiscordBot", "DiscordBot\Di
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Database", "Database\Database.csproj", "{82149D5B-77CB-45EF-8848-0D0B4316F50B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContainerService", "ContainerService\ContainerService.csproj", "{9C5507D8-78F9-4772-BD22-8B6B40AF487F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContainerService", "ContainerService\ContainerService.csproj", "{9C5507D8-78F9-4772-BD22-8B6B40AF487F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
