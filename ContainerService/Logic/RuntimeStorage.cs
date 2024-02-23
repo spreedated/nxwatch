@@ -1,5 +1,5 @@
 ﻿using ContainerService.Models;
-using DiscordBot;
+using neXn.Lib.DiscordBot;
 using neXn.Lib.ConfigurationHandler;
 using Scraper.Models;
 using System;

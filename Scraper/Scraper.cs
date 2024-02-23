@@ -97,7 +97,6 @@ namespace Scraper
             {
                 using (HttpResponseMessage m = await this.httpClient.GetAsync(BuildUrl(page)))
                 {
-                    //# ### # 
                     if (!m.IsSuccessStatusCode)
                     {
                         return null;

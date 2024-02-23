@@ -2,7 +2,7 @@
 
 using Database;
 using Discord.WebSocket;
-using DiscordBot.Attributes;
+using neXn.Lib.DiscordBot.Attributes;
 using Scraper.Models;
 using System;
 using System.Linq;
