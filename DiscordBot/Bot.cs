@@ -2,11 +2,12 @@
 
 using Discord;
 using Discord.WebSocket;
-using DiscordBot.EventArgs;
+using DiscordBot.Attributes;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,6 +17,7 @@ namespace DiscordBot
     {
         private CancellationTokenSource cts;
         private IMessageChannel primaryChannel;
+        private bool subscribedToGlobalCommands;
 
         public DiscordSocketClient Client { get; private set; }
         public string Token { get; init; }
@@ -29,13 +31,11 @@ namespace DiscordBot
         }
         public ulong PrimaryChannelId { get; init; }
         public int ConnectionRetries { get; private set; } = 10;
-        public List<BotCommand> Commands { get; } = [];
 
         public event EventHandler Connected;
         public event EventHandler ConnectedToPrimaryChannel;
         public event EventHandler FullyInitialized;
         public event EventHandler ConnectionError;
-        public event EventHandler<CommandTriggeredEventArgs> CommandTriggered;
 
         #region Constructor
         public Bot(string token, ulong primaryChannelId)
@@ -85,25 +85,6 @@ namespace DiscordBot
             return Task.CompletedTask;
         }
 
-        private async Task MessageReceivedAsync(SocketMessage message)
-        {
-            if (message.Channel.Id != this.PrimaryChannelId || !this.Commands.Exists(x => x.Triggers.Any(x => x.Contains(message.Content.Split()[0], StringComparison.InvariantCultureIgnoreCase))))
-            {
-                return;
-            }
-
-            List<Task> tasks = [];
-
-            foreach (BotCommand cmd in this.Commands.Where(x => x.Triggers.Any(x => x.Contains(message.Content.Split()[0], StringComparison.InvariantCultureIgnoreCase))))
-            {
-                tasks.Add(Task.Run(() => { cmd.Command.Invoke(message); }));
-
-                this.CommandTriggered?.Invoke(this, new(cmd.Name, message.Author.Username));
-            }
-
-            await Task.WhenAll(tasks);
-        }
-
         public async Task Connect()
         {
             if (this.Client != null || this.IsConnected || this.IsReady)
@@ -142,8 +123,6 @@ namespace DiscordBot
 
             this.cts?.Dispose();
 
-            this.Client.MessageReceived += this.MessageReceivedAsync;
-
             this.FullyInitialized?.Invoke(this, System.EventArgs.Empty);
         }
 
@@ -176,6 +155,38 @@ namespace DiscordBot
             }
 
             await this.primaryChannel.SendMessageAsync(text, allowedMentions: AllowedMentions.All);
+        }
+
+        public async Task SubscribeToGlobalCommands(Type staticClassWithCommands)
+        {
+            if (subscribedToGlobalCommands)
+            {
+                return;
+            }
+
+            foreach (MethodInfo m in staticClassWithCommands.GetMethods().Where(x => x.GetCustomAttributes<BotSlashCommandAttribute>().Any()))
+            {
+                BotSlashCommandAttribute attr = m.GetCustomAttribute<BotSlashCommandAttribute>();
+
+                if (attr == null || !attr.IsValid())
+                {
+                    continue;
+                }
+
+                SlashCommandBuilder globalCommand = new();
+                globalCommand.WithName(attr.Name).WithDescription(attr.Description);
+                await this.Client.CreateGlobalApplicationCommandAsync(globalCommand.Build());
+            }
+
+            this.Client.SlashCommandExecuted += async (t) =>
+            {
+                foreach (MethodInfo m in staticClassWithCommands.GetMethods().Where(x => x.GetCustomAttributes<BotSlashCommandAttribute>().Any() && x.GetCustomAttribute<BotSlashCommandAttribute>().Triggers.Any(x => x.Equals(t.CommandName, StringComparison.InvariantCultureIgnoreCase))))
+                {
+                    await Task.Run(() => m.Invoke(null, [t]));
+                }
+            };
+
+            this.subscribedToGlobalCommands = true;
         }
 
         #region Dispose
