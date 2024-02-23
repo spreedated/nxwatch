@@ -1,9 +1,10 @@
-﻿using HtmlAgilityPack;
+﻿#pragma warning disable S6605
+
+using HtmlAgilityPack;
 using Scraper.Models;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -49,7 +50,7 @@ namespace Scraper
 
             if (htmlNodes == null || htmlNodes.Count <= 0)
             {
-                return Array.Empty<string>();
+                return [];
             }
 
             return htmlNodes.Select(x => x.InnerText);
@@ -129,7 +130,7 @@ namespace Scraper
 
             if (nodes == null)
             {
-                return Array.Empty<SwitchGame>();
+                return [];
             }
 
             List<SwitchGame> games = [];
@@ -164,7 +165,7 @@ namespace Scraper
         {
             if (to < from || to - from == 0)
             {
-                return Array.Empty<SwitchGame>();
+                return [];
             }
 
             List<SwitchGame> games = [];

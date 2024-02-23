@@ -1,6 +1,6 @@
 ﻿using ContainerService.Models;
-using neXn.Lib.DiscordBot;
 using neXn.Lib.ConfigurationHandler;
+using neXn.Lib.DiscordBot;
 using Scraper.Models;
 using System;
 using System.Collections.Generic;
