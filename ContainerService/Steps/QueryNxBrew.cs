@@ -5,6 +5,7 @@ using Scraper.Models;
 using Serilog;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace ContainerService.Steps
 {
@@ -24,7 +25,15 @@ namespace ContainerService.Steps
             {
                 using (IDatabaseConnection conn = new DatabaseConnection(RuntimeStorage.ConfigurationHandler.RuntimeConfiguration.DatabasePath))
                 {
-                    foreach (SwitchGame s in (await scraper.GetGamesFromPage()).Except(await conn.ReadAllGames(), new SwitchGameComparer()))
+                    IEnumerable<SwitchGame> games = await scraper.GetGamesFromPage();
+
+                    if (!games.Any())
+                    {
+                        Log.Information("No new games found");
+                        return;
+                    }
+
+                    foreach (SwitchGame s in (games).Except(await conn.ReadAllGames(), new SwitchGameComparer()))
                     {
                         Log.Information($" |> New game found \"{s.Name}\" - Posted at: {s.NxDate} - Found it on \"{s.Date}\" -> Link: \"{s.Link}\"");
                         RuntimeStorage.GamesToProcess.Add(s);
