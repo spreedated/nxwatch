@@ -9,7 +9,7 @@ namespace ContainerService.Steps
     {
         public SaveToDatabase() : base()
         {
-            base.Id = 3;
+            base.Id = 4;
             base.Name = "Save processed games to Database";
             base.ContinueOnError = false;
             base.IsActive = true;

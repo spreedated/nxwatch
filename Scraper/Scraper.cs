@@ -1,4 +1,6 @@
-﻿using HtmlAgilityPack;
+﻿#pragma warning disable S6605
+
+using HtmlAgilityPack;
 using Scraper.Models;
 using System;
 using System.Collections.Generic;
@@ -35,7 +37,7 @@ namespace Scraper
                 Timeout = TimeSpan.FromSeconds(10),
                 DefaultRequestHeaders =
                 {
-                    { "User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X)" }
+                    { "User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246" }
                 }
             };
         }
@@ -48,7 +50,7 @@ namespace Scraper
 
             if (htmlNodes == null || htmlNodes.Count <= 0)
             {
-                return Array.Empty<string>();
+                return [];
             }
 
             return htmlNodes.Select(x => x.InnerText);
@@ -128,7 +130,7 @@ namespace Scraper
 
             if (nodes == null)
             {
-                return Array.Empty<SwitchGame>();
+                return [];
             }
 
             List<SwitchGame> games = [];
@@ -163,7 +165,7 @@ namespace Scraper
         {
             if (to < from || to - from == 0)
             {
-                return Array.Empty<SwitchGame>();
+                return [];
             }
 
             List<SwitchGame> games = [];

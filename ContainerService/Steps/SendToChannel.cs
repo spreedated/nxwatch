@@ -10,7 +10,7 @@ namespace ContainerService.Steps
     {
         public SendToChannel() : base()
         {
-            base.Id = 2;
+            base.Id = 3;
             base.Name = "Send Games to Channel";
             base.ContinueOnError = false;
             base.IsActive = true;

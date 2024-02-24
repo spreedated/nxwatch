@@ -7,11 +7,16 @@
     <UserSecretsId>dotnet-ContainerService-56a76029-74ab-431d-a6e1-b9029a09b5ce</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <AssemblyName>nxreporter-bot</AssemblyName>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>nxbot.snk</AssemblyOriginatorKeyFile>
+    <NoWarn>1701;1702;IDE0063;IDE0290</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="ByteSize" Version="2.1.2" />
+    <PackageReference Include="Discord.Net.Commands" Version="3.13.1" />
+    <PackageReference Include="Discord.Net.WebSocket" Version="3.13.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
     <PackageReference Include="Serilog" Version="3.1.1" />
@@ -23,13 +28,15 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Database\Database.csproj" />
-    <ProjectReference Include="..\DiscordBot\DiscordBot.csproj" />
     <ProjectReference Include="..\Scraper\Scraper.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="neXn.Lib.ConfigurationHandler">
       <HintPath>..\Libraries\neXn.Lib.ConfigurationHandler.dll</HintPath>
+    </Reference>
+    <Reference Include="neXn.Lib.DiscordBot">
+      <HintPath>..\Libraries\neXn.Lib.DiscordBot.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>

@@ -18,6 +18,7 @@ namespace ContainerService
 
         public Worker()
         {
+            RuntimeStorage.StartTime = DateTime.Now;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)

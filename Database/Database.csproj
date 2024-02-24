@@ -6,7 +6,7 @@
     <Nullable>disable</Nullable>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>db.snk</AssemblyOriginatorKeyFile>
-    <NoWarn>1701;1702;IDE0063</NoWarn>
+    <NoWarn>1701;1702;IDE0063;IDE0290</NoWarn>
     <Version>1.0.0</Version>
     <Authors>Markus Karl Wackermann</Authors>
   </PropertyGroup>
@@ -18,6 +18,7 @@
     <None Remove="Sql\SelectAllGameIds.sql" />
     <None Remove="Sql\SelectAllGames.sql" />
     <None Remove="Sql\SelectGamesCount.sql" />
+    <None Remove="Sql\SelectLatest.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,12 +26,13 @@
     <EmbeddedResource Include="Sql\InsertGame.sql" />
     <EmbeddedResource Include="Sql\CreateBlankDatabase.sql" />
     <EmbeddedResource Include="Sql\SelectAllGameIds.sql" />
+    <EmbeddedResource Include="Sql\SelectLatest.sql" />
     <EmbeddedResource Include="Sql\SelectAllGames.sql" />
     <EmbeddedResource Include="Sql\SelectGamesCount.sql" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.2" />
   </ItemGroup>
 
   <ItemGroup>
